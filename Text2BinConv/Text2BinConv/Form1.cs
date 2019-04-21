@@ -31,6 +31,14 @@ namespace Text2BinConv
 
         private void TextDecode(string text)
         {
+           /*
+            * 手順
+            * 1.テキストを読み込む
+            * 2.ビット列を4文字ずつ区切って読み込み、対応する数値と区切り文字へ変換
+            * 3.数字をバイト列に変換して読み込む（区切り文字は破棄する）
+            * 4.バイト列に読み込んだら、0データを取り除いてUTF-8へ変換
+            */
+
             //ビット列を読み込む
             //4ビット分ずつ
 
@@ -42,19 +50,39 @@ namespace Text2BinConv
 
             byte[] inbytes = new byte[decodebytes.Length];
 
+            string decodestring = "";
+
             for (int i = 0; i < decodebytes.Length; i++)
             {
                 txtOut.AppendText(GetStringFromBitString(decodebytes[i]));
+                decodestring += GetStringFromBitString(decodebytes[i]);
             }
 
+            //txtOut.AppendText("\n");
+            
+
+            string result = "";
+            byte[] blist= new byte[]{};
+            int c = 0;
+            // バイト列になったので、これを戻す
+            foreach (var s in decodestring.Trim().Split('.'))
+            {
+                if (s == "") continue;
+                int num = int.Parse(s);
+                byte[] b = BitConverter.GetBytes(num);
+
+                //blist = blist.Concat(b);
+                Array.Resize(ref blist,blist.Length + b.Length);
+                b.CopyTo(blist,blist.Length-b.Length);
 
 
-            //// バイト列になったので、これを戻す
-            //string dbgtxt = System.Text.Encoding.UTF8.GetString(inBytes);
-            //txtOut.AppendText(dbgtxt);
+            }
+            //バイト列から0を抜き取る
+            blist = blist.Where(s => s != 0).ToArray();
 
-
-
+                result += System.Text.Encoding.UTF8.GetString(blist);
+            
+            txtOut.Text = result;
 
 
         }
@@ -66,19 +94,21 @@ namespace Text2BinConv
             /*
              * 手順
              * 1.テキストを読み込む
-             * 2.UTF-8のバイナリに変換
-             * 3.そのバイナリをバイト列に変換
-             * 4.バイト列をビットに変換(8文字ずつ区切る)
+             * 2.UTF-8のバイト列にに変換
+             * 3.バイト列から対応する数字に変換、区切り文字を付加
+             * 4.数字を対応するビットに変換。区切り文字も変換。
              */
 
-
+            List<byte[]> lsttext = new List<byte[]>();
+            string encodetext = "";
 
             byte[] inBytes = System.Text.Encoding.UTF8.GetBytes(inText);
 
             //output(debug)
             for (int i = 0; i < inBytes.Length; i++)
             {
-                txtOut.AppendText(inBytes[i].ToString());
+                txtOut.AppendText(inBytes[i].ToString() + ".");
+                encodetext += inBytes[i].ToString() + ".";
             }
             /*
             // バイト列から戻してみる
@@ -86,32 +116,30 @@ namespace Text2BinConv
             txtOut.AppendText(dbgtxt);
             */
 
-            //バイト列になったので、これをビット列に変換
+            //バイト列になったので、これを仮想ビット列に変換
 
-            string bytedata = txtOut.Text;
+            string[] sBytes = new string[encodetext.Length*4];
 
-            string[] sBytes = new string[bytedata.Length];
-
-            for (int i = 0; i < bytedata.Length; i++)
+            for (int i = 0; i < encodetext.Length; i++)
             {
-                sBytes[i] = bytedata.Substring(i, 1);
+                sBytes[i] = encodetext.Substring(i, 1);
             }
 
             //debug
-            for (int i = 0; i < sBytes.Length; i++)
-            {
-                txtOut.AppendText(sBytes[i]);
-            }
-
-
+            //for (int i = 0; i < sBytes.Length; i++)
+            //{
+            //    txtOut.AppendText(sBytes[i]);
+            //}
 
             // 読み込んだらtxtOutを一旦クリア
-            txtOut.AppendText("\n");
+            txtOut.Clear();
 
-            for (int i = 0; i < inBytes.Length; i++)
+            string sbitarray = "";
+            for (int i = 0; i < sBytes.Length; i++)
             {
                 txtOut.AppendText(GetBitStringFromString(sBytes[i]));
-            }
+                sbitarray += GetBitStringFromString(sBytes[i]);
+        }
         }
 
         private string GetBitStringFromString(string v)
@@ -138,6 +166,8 @@ namespace Text2BinConv
                     return "1000";
                 case "9":
                     return "1001";
+                case ".":
+                    return "1111";
                 default:
                     return "";
             }
@@ -167,6 +197,8 @@ namespace Text2BinConv
                     return "8";
                 case "1001":
                     return "9";
+                case "1111":
+                    return ".";
                 default:
                     return "";
             }
