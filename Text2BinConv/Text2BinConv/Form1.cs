@@ -58,13 +58,13 @@ namespace Text2BinConv
                 decodestring += GetStringFromBitString(decodebytes[i]);
             }
 
-            //txtOut.AppendText("\n");
-            
+            //もし追加で復号化等の処理をする場合、ここで decodetext に対して行う
+            //ただしテキストtoテキストの復号化のみ。
 
             string result = "";
             byte[] blist= new byte[]{};
             int c = 0;
-            // バイト列になったので、これを戻す
+            // decodestringからバイト列に戻して、UTF-8のバイト列にする
             foreach (var s in decodestring.Trim().Split('.'))
             {
                 if (s == "") continue;
@@ -110,6 +110,10 @@ namespace Text2BinConv
                 txtOut.AppendText(inBytes[i].ToString() + ".");
                 encodetext += inBytes[i].ToString() + ".";
             }
+
+            //もし追加で暗号化等の処理をする場合、ここで　encodetext に対して行う
+            //ただしテキストtoテキストの暗号化のみ。
+
             /*
             // バイト列から戻してみる
             string dbgtxt = System.Text.Encoding.UTF8.GetString(inBytes);
