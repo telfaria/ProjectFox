@@ -18,9 +18,17 @@ namespace Text2BinConv
         private string generatebitdata = "";
 
         // sound data definw
+        // pattern 1 0.2sec
         private const string p1_440_0 = @"Resource\440_0_02.wav";
         private const string p1_880_1 = @"Resource\880_1_02.wav";
-        private const string p0_000_0 = @"Resource\000_0_02.wav";
+        
+
+        //pattern 2 0.1sec
+        private const string p2_440_0 = @"Resource\440_0_01_fo.wav";
+        private const string p2_880_1 = @"Resource\880_1_01_fo.wav";
+
+        private const string p0_000_0 = @"Resource\000_0_02.wav";　  // 文字間インターバル（1111の時使う）
+        private const string p0_000_001 = @"Resource\000_0_001.wav"; // ビット間インターバル（ビット間に使う）
 
 
 
@@ -244,11 +252,13 @@ namespace Text2BinConv
                         switch (v)
                         {
                             case '0':
-                                soundlist.Add(p1_440_0);
+                                soundlist.Add(p2_440_0);
+                                soundlist.Add(p0_000_001); // interval
                                break;
 
                             case '1':
-                                soundlist.Add(p1_880_1);
+                                soundlist.Add(p2_880_1);
+                                soundlist.Add(p0_000_001); // interval
                                 break;
                         }
                     }
