@@ -9,11 +9,21 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using NAudio.SoundFont;
 
 namespace Text2BinConv
 {
     public partial class Form1 : Form
     {
+        private string generatebitdata = "";
+
+        // sound data definw
+        private const string p1_440_0 = @"Resource\440_0_02.wav";
+        private const string p1_880_1 = @"Resource\880_1_02.wav";
+        private const string p0_000_0 = @"Resource\000_0_02.wav";
+
+
+
         public Form1()
         {
             InitializeComponent();
@@ -143,7 +153,9 @@ namespace Text2BinConv
             {
                 txtOut.AppendText(GetBitStringFromString(sBytes[i]));
                 sbitarray += GetBitStringFromString(sBytes[i]);
-        }
+            }
+
+            generatebitdata = sbitarray;
         }
 
         private string GetBitStringFromString(string v)
@@ -206,6 +218,52 @@ namespace Text2BinConv
                 default:
                     return "";
             }
+        }
+
+        private void tsbEncodeAndAudioGen_Click(object sender, EventArgs e)
+        {
+            tsbEncode_Click(sender, e);
+
+            //Generate Sounds List.
+            string[] bitdata;
+            bitdata = StringExtensions.SubstringAtCount(generatebitdata, 4);
+
+            List<string> soundlist = new List<string>();
+            foreach (string s in bitdata)
+            {
+                if (s == "1111")
+                {
+                     soundlist.Add( p0_000_0);
+                     continue;
+                     ;
+                }
+                else
+                {
+                    foreach (var v in s.ToCharArray())
+                    {
+                        switch (v)
+                        {
+                            case '0':
+                                soundlist.Add(p1_440_0);
+                               break;
+
+                            case '1':
+                                soundlist.Add(p1_880_1);
+                                break;
+                        }
+                    }
+                }
+            }
+
+            //Generate sounds.
+            cCreateWav cw = new cCreateWav();
+
+            string outfile = $"{DateTime.Now:yyyyMMdd_HHmmss}.wav";
+
+            cw.Concatenate(outfile, soundlist);
+
+            MessageBox.Show("データを出力しました");
+
         }
     }
     public static class StringExtensions

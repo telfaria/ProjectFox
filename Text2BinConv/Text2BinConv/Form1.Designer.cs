@@ -32,9 +32,10 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tsbEncode = new System.Windows.Forms.ToolStripButton();
+            this.tsbDecode = new System.Windows.Forms.ToolStripButton();
             this.txtIn = new System.Windows.Forms.TextBox();
             this.txtOut = new System.Windows.Forms.TextBox();
-            this.tsbDecode = new System.Windows.Forms.ToolStripButton();
+            this.tsbEncodeAndAudioGen = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -67,7 +68,8 @@
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbEncode,
-            this.tsbDecode});
+            this.tsbDecode,
+            this.tsbEncodeAndAudioGen});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Padding = new System.Windows.Forms.Padding(0, 0, 2, 0);
@@ -85,6 +87,16 @@
             this.tsbEncode.Text = "Encode";
             this.tsbEncode.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
             this.tsbEncode.Click += new System.EventHandler(this.tsbEncode_Click);
+            // 
+            // tsbDecode
+            // 
+            this.tsbDecode.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbDecode.Image = ((System.Drawing.Image)(resources.GetObject("tsbDecode.Image")));
+            this.tsbDecode.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbDecode.Name = "tsbDecode";
+            this.tsbDecode.Size = new System.Drawing.Size(51, 22);
+            this.tsbDecode.Text = "Decode";
+            this.tsbDecode.Click += new System.EventHandler(this.tsbDecode_Click);
             // 
             // txtIn
             // 
@@ -110,18 +122,18 @@
             this.txtOut.Name = "txtOut";
             this.txtOut.ReadOnly = true;
             this.txtOut.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtOut.Size = new System.Drawing.Size(1198, 345);
+            this.txtOut.Size = new System.Drawing.Size(1198, 344);
             this.txtOut.TabIndex = 0;
             // 
-            // tsbDecode
+            // tsbEncodeAndAudioGen
             // 
-            this.tsbDecode.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsbDecode.Image = ((System.Drawing.Image)(resources.GetObject("tsbDecode.Image")));
-            this.tsbDecode.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbDecode.Name = "tsbDecode";
-            this.tsbDecode.Size = new System.Drawing.Size(51, 22);
-            this.tsbDecode.Text = "Decode";
-            this.tsbDecode.Click += new System.EventHandler(this.tsbDecode_Click);
+            this.tsbEncodeAndAudioGen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbEncodeAndAudioGen.Image = ((System.Drawing.Image)(resources.GetObject("tsbEncodeAndAudioGen.Image")));
+            this.tsbEncodeAndAudioGen.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbEncodeAndAudioGen.Name = "tsbEncodeAndAudioGen";
+            this.tsbEncodeAndAudioGen.Size = new System.Drawing.Size(146, 22);
+            this.tsbEncodeAndAudioGen.Text = "Encode + Generate Audio";
+            this.tsbEncodeAndAudioGen.Click += new System.EventHandler(this.tsbEncodeAndAudioGen_Click);
             // 
             // Form1
             // 
@@ -153,6 +165,7 @@
         private System.Windows.Forms.TextBox txtOut;
         private System.Windows.Forms.ToolStripButton tsbEncode;
         private System.Windows.Forms.ToolStripButton tsbDecode;
+        private System.Windows.Forms.ToolStripButton tsbEncodeAndAudioGen;
     }
 }
 
