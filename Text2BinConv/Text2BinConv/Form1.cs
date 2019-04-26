@@ -1,9 +1,11 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Cryptography;
 using System.Text;
@@ -30,24 +32,23 @@ namespace Text2BinConv
         private const string p0_000_0 = @"Resource\000_0_02.wav";　  // 文字間インターバル（1111の時使う）
         private const string p0_000_001 = @"Resource\000_0_001.wav"; // ビット間インターバル（ビット間に使う）
 
-
-
         public Form1()
         {
             InitializeComponent();
+            tscCryptMethod.SelectedIndex = 0;
         }
 
         private void tsbEncode_Click(object sender, EventArgs e)
         {
-            TextEncode(txtIn.Text);
+            TextEncode(txtIn.Text,tscCryptMethod.SelectedItem.ToString());
         }
 
         private void tsbDecode_Click(object sender, EventArgs e)
         {
-            TextDecode(txtIn.Text);
+            TextDecode(txtIn.Text,tscCryptMethod.SelectedItem.ToString());
         }
 
-        private void TextDecode(string text)
+        private void TextDecode(string text,string scrunblepattern)
         {
            /*
             * 手順
@@ -76,9 +77,6 @@ namespace Text2BinConv
                 decodestring += GetStringFromBitString(decodebytes[i]);
             }
 
-            //もし追加で復号化等の処理をする場合、ここで decodetext に対して行う
-            //ただしテキストtoテキストの復号化のみ。
-
             string result = "";
             byte[] blist= new byte[]{};
             int c = 0;
@@ -98,14 +96,19 @@ namespace Text2BinConv
             //バイト列から0を抜き取る
             blist = blist.Where(s => s != 0).ToArray();
 
-                result += System.Text.Encoding.UTF8.GetString(blist);
+            //もし追加で復号化等の処理をする場合、ここで blist に対して行う
+            //byte[]を渡してbyte[] で返る
+            blist = ExecuteMethod(scrunblepattern + "_Decode", blist);
+
+
+            result += System.Text.Encoding.UTF8.GetString(blist);
             
             txtOut.Text = result;
 
 
         }
 
-        private void TextEncode(string inText)
+        private void TextEncode(string inText,string scrunblepattern)
         {
             txtOut.Clear();
 
@@ -122,6 +125,12 @@ namespace Text2BinConv
 
             byte[] inBytes = System.Text.Encoding.UTF8.GetBytes(inText);
 
+            //もし追加で暗号化等の処理をする場合、ここで　inBytes に対して行う
+            //byte[]を渡してbyte[] で返る
+
+            inBytes = ExecuteMethod(scrunblepattern + "_Encode", inBytes);
+
+
             //output(debug)
             for (int i = 0; i < inBytes.Length; i++)
             {
@@ -129,8 +138,6 @@ namespace Text2BinConv
                 encodetext += inBytes[i].ToString() + ".";
             }
 
-            //もし追加で暗号化等の処理をする場合、ここで　encodetext に対して行う
-            //ただしテキストtoテキストの暗号化のみ。
 
             /*
             // バイト列から戻してみる
@@ -164,6 +171,20 @@ namespace Text2BinConv
             }
 
             generatebitdata = sbitarray;
+        }
+
+        private byte[] ExecuteMethod(string v, byte[] inBytes)
+        {
+            cScramble sc = new cScramble();
+            Type t = sc.GetType();
+
+            MethodInfo mi = t.GetMethod(v);
+
+            object o = mi.Invoke(sc, new object[]{inBytes});
+
+            byte[] ret = (byte[]) o;
+
+            return ret;
         }
 
         private string GetBitStringFromString(string v)

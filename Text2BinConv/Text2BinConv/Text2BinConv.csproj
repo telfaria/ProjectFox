@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="cCreateWav.cs" />
+    <Compile Include="cScramble.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

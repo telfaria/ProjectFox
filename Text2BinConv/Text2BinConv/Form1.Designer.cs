@@ -33,9 +33,13 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tsbEncode = new System.Windows.Forms.ToolStripButton();
             this.tsbDecode = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbEncodeAndAudioGen = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+            this.tscCryptMethod = new System.Windows.Forms.ToolStripComboBox();
             this.txtIn = new System.Windows.Forms.TextBox();
             this.txtOut = new System.Windows.Forms.TextBox();
-            this.tsbEncodeAndAudioGen = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -69,7 +73,11 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbEncode,
             this.tsbDecode,
-            this.tsbEncodeAndAudioGen});
+            this.toolStripSeparator1,
+            this.tsbEncodeAndAudioGen,
+            this.toolStripSeparator2,
+            this.toolStripLabel1,
+            this.tscCryptMethod});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Padding = new System.Windows.Forms.Padding(0, 0, 2, 0);
@@ -98,6 +106,43 @@
             this.tsbDecode.Text = "Decode";
             this.tsbDecode.Click += new System.EventHandler(this.tsbDecode_Click);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // tsbEncodeAndAudioGen
+            // 
+            this.tsbEncodeAndAudioGen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbEncodeAndAudioGen.Image = ((System.Drawing.Image)(resources.GetObject("tsbEncodeAndAudioGen.Image")));
+            this.tsbEncodeAndAudioGen.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbEncodeAndAudioGen.Name = "tsbEncodeAndAudioGen";
+            this.tsbEncodeAndAudioGen.Size = new System.Drawing.Size(146, 22);
+            this.tsbEncodeAndAudioGen.Text = "Encode + Generate Audio";
+            this.tsbEncodeAndAudioGen.Click += new System.EventHandler(this.tsbEncodeAndAudioGen_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripLabel1
+            // 
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Size = new System.Drawing.Size(83, 22);
+            this.toolStripLabel1.Text = "Crypt Method:";
+            // 
+            // tscCryptMethod
+            // 
+            this.tscCryptMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.tscCryptMethod.Items.AddRange(new object[] {
+            "None",
+            "LeftBitShift2",
+            "RightBitShift2",
+            "3DES"});
+            this.tscCryptMethod.Name = "tscCryptMethod";
+            this.tscCryptMethod.Size = new System.Drawing.Size(121, 25);
+            // 
             // txtIn
             // 
             this.txtIn.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -122,18 +167,8 @@
             this.txtOut.Name = "txtOut";
             this.txtOut.ReadOnly = true;
             this.txtOut.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtOut.Size = new System.Drawing.Size(1198, 344);
+            this.txtOut.Size = new System.Drawing.Size(1198, 341);
             this.txtOut.TabIndex = 0;
-            // 
-            // tsbEncodeAndAudioGen
-            // 
-            this.tsbEncodeAndAudioGen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsbEncodeAndAudioGen.Image = ((System.Drawing.Image)(resources.GetObject("tsbEncodeAndAudioGen.Image")));
-            this.tsbEncodeAndAudioGen.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbEncodeAndAudioGen.Name = "tsbEncodeAndAudioGen";
-            this.tsbEncodeAndAudioGen.Size = new System.Drawing.Size(146, 22);
-            this.tsbEncodeAndAudioGen.Text = "Encode + Generate Audio";
-            this.tsbEncodeAndAudioGen.Click += new System.EventHandler(this.tsbEncodeAndAudioGen_Click);
             // 
             // Form1
             // 
@@ -166,6 +201,10 @@
         private System.Windows.Forms.ToolStripButton tsbEncode;
         private System.Windows.Forms.ToolStripButton tsbDecode;
         private System.Windows.Forms.ToolStripButton tsbEncodeAndAudioGen;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
+        private System.Windows.Forms.ToolStripComboBox tscCryptMethod;
     }
 }
 
