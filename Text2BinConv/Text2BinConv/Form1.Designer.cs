@@ -139,7 +139,7 @@
             "None",
             "LeftBitShift2",
             "RightBitShift2",
-            "3DES"});
+            "TripleDES"});
             this.tscCryptMethod.Name = "tscCryptMethod";
             this.tscCryptMethod.Size = new System.Drawing.Size(121, 25);
             // 
@@ -167,7 +167,7 @@
             this.txtOut.Name = "txtOut";
             this.txtOut.ReadOnly = true;
             this.txtOut.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtOut.Size = new System.Drawing.Size(1198, 341);
+            this.txtOut.Size = new System.Drawing.Size(1198, 340);
             this.txtOut.TabIndex = 0;
             // 
             // Form1
