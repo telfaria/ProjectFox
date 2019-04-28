@@ -29,6 +29,11 @@ namespace Text2BinConv
         private const string p2_440_0 = @"Resource\440_0_01_fo.wav";
         private const string p2_880_1 = @"Resource\880_1_01_fo.wav";
 
+        //pattern 3 0.1sec Faadein/Fadeout
+        private const string p3_440_0 = @"Resource\440_0_01_fi_fo.wav";
+        private const string p3_880_1 = @"Resource\880_1_01_fi_fo.wav";
+
+
         private const string p0_000_0 = @"Resource\000_0_02.wav";　  // 文字間インターバル（1111の時使う）
         private const string p0_000_001 = @"Resource\000_0_001.wav"; // ビット間インターバル（ビット間に使う）
 
@@ -273,12 +278,12 @@ namespace Text2BinConv
                         switch (v)
                         {
                             case '0':
-                                soundlist.Add(p2_440_0);
+                                soundlist.Add(p3_440_0);
                                 soundlist.Add(p0_000_001); // interval
                                break;
 
                             case '1':
-                                soundlist.Add(p2_880_1);
+                                soundlist.Add(p3_880_1);
                                 soundlist.Add(p0_000_001); // interval
                                 break;
                         }
