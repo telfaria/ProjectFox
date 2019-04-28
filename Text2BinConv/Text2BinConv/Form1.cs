@@ -19,7 +19,7 @@ namespace Text2BinConv
     {
         private string generatebitdata = "";
 
-        // sound data definw
+        // sound data define
         // pattern 1 0.2sec
         private const string p1_440_0 = @"Resource\440_0_02.wav";
         private const string p1_880_1 = @"Resource\880_1_02.wav";
