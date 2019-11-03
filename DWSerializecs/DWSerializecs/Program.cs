@@ -40,18 +40,17 @@ namespace DWSerializecs
             /*
              * 手順
              * 1.テキストを読み込む
-             * 2.ビット列を4文字ずつ区切って読み込み、対応する数値と区切り文字へ変換
+             * 2.テキストを半角スペースで区切って読み込み、対応する数値と区切り文字へ変換
              * 3.数字をバイト列に変換して読み込む（区切り文字は破棄する）
              * 4.バイト列に読み込んだら、0データを取り除いてUTF-8へ変換
              */
 
-            //ビット列を読み込む
-            //4ビット分ずつ
-
+            //TODO:スペース切り詰めて2文字単位で抽出して変換・復元できるか検証する→できた
 
 
             string[] decodebytes;
-            decodebytes = text.Split(" ");
+            // splitで区切らないで2文字ずつ抽出していくとどうか
+            decodebytes = MySplit(text.Replace(" ",""),2);
 
 
             byte[] inbytes = new byte[decodebytes.Length];
@@ -80,6 +79,7 @@ namespace DWSerializecs
 
 
             }
+
             //バイト列から0を抜き取る
             blist = blist.Where(s => s != 0).ToArray();
 
@@ -104,6 +104,9 @@ namespace DWSerializecs
              * 4.数字を対応するビットに変換。区切り文字も変換。
              */
 
+            //TODO:スペース切り詰めて2文字単位で抽出して変換・復元できるか検証する→できた
+
+
             List<byte[]> lsttext = new List<byte[]>();
             string encodetext = "";
             string encodetext_dw = "";
@@ -127,33 +130,10 @@ namespace DWSerializecs
 
             for (int i = 0; i < inBytes.Length; i++)
             {
-                Console.Write(GetBitStringFromString_dwp2(inBytes[i]) + " ");
-                encodetext_dw += GetBitStringFromString_dwp2(inBytes[i]) + " ";
+                Console.Write(GetBitStringFromString_dwp2(inBytes[i]) );
+                encodetext_dw += GetBitStringFromString_dwp2(inBytes[i]);
             }
 
-
-            /*
-            // バイト列から戻してみる
-            string dbgtxt = System.Text.Encoding.UTF8.GetString(inBytes);
-            txtOut.AppendText(dbgtxt);
-            */
-
-            //バイト列になったので、これを仮想ビット列に変換
-
-            string[] sBytes = new string[encodetext.Length * 4];
-
-            for (int i = 0; i < encodetext.Length; i++)
-            {
-                sBytes[i] = encodetext.Substring(i, 1);
-            }
-
-
-            string sbitarray = "";
-            for (int i = 0; i < sBytes.Length; i++)
-            {
-                Console.Write(GetBitStringFromString(sBytes[i]));
-                sbitarray += GetBitStringFromString(sBytes[i]);
-            }
 
             //generatebitdata = sbitarray;
         }
@@ -214,7 +194,7 @@ namespace DWSerializecs
                 s += dwIndexString.Substring(int.Parse(d), 1);
 
             }
-            
+
             return s;
         }
 
