@@ -1,41 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Reflection.Metadata;
 
 namespace DWSerializecs
 {
     class Program
     {
         private const string dwIndexString = "あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをんかぎぐげござじずぜぞだぢづでどばびぶべぼぱぴぷぺぽアイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲンカギグゲゴザジズゼゾダヂヅデドバビブベボパピプペポ";
-
+        private const string ScramblePattern = "None";
         static void Main(string[] args)
         {
             string basetext = "";
-            basetext = CreateRandomText_plain(100);
+            basetext = "河野太郎";
 
-            TextEncode_dw(basetext);
-            TextDecode_dw(CreateRandomText_scambled(100));
-
+            string result;
+            
+            result = TextEncode_dw(basetext);
+            Console.WriteLine(result);
+            result = TextDecode_dw(result);
+            Console.WriteLine(result);
         }
 
-        /// <summary>
-        /// テスト用文章生成
-        /// </summary>
-        /// <param name="v"></param>
-        /// <returns></returns>
-        private static string CreateRandomText_plain(int v)
-        {
-            return
-                "河野太郎";
-        }
-        private static string CreateRandomText_scambled(int v)
-        {
-            return
-                "ねあ つけ つこ ねえ せか そう ぬこ ちお つあ ねえ せい そう";
-        }
-
-
-        private static void TextDecode_dw(string text)
+        private static string TextDecode_dw(string text)
         {
             /*
              * 手順
@@ -45,7 +33,7 @@ namespace DWSerializecs
              * 4.バイト列に読み込んだら、0データを取り除いてUTF-8へ変換
              */
 
-            //TODO:スペース切り詰めて2文字単位で抽出して変換・復元できるか検証する→できた
+            //スペース切り詰めて2文字単位で抽出して変換・復元する
 
 
             string[] decodebytes;
@@ -59,7 +47,7 @@ namespace DWSerializecs
 
             for (int i = 0; i < decodebytes.Length; i++)
             {
-                Console.Write(GetStringFromBitString_dwp2(decodebytes[i]) + " ");
+                //Console.Write(GetStringFromBitString_dwp2(decodebytes[i]) + " ");
                 decodestring += GetStringFromBitString_dwp2(decodebytes[i]) + " ";
             }
 
@@ -83,18 +71,20 @@ namespace DWSerializecs
             //バイト列から0を抜き取る
             blist = blist.Where(s => s != 0).ToArray();
 
-
+            //もし追加で復号化等の処理をする場合、ここで blist に対して行う
+            //byte[]を渡してbyte[] で返る
+            blist = ExecuteMethod(ScramblePattern + "_Decode", blist);
 
             result += System.Text.Encoding.UTF8.GetString(blist);
 
-            Console.WriteLine(result);
+            return result;
+          
 
 
         }
 
-        private static void TextEncode_dw(string inText)
+        private static string  TextEncode_dw(string inText)
         {
-
 
             /*
              * 手順
@@ -104,7 +94,7 @@ namespace DWSerializecs
              * 4.数字を対応するビットに変換。区切り文字も変換。
              */
 
-            //TODO:スペース切り詰めて2文字単位で抽出して変換・復元できるか検証する→できた
+            //スペース切り詰めて2文字単位で抽出して変換・復元する
 
 
             List<byte[]> lsttext = new List<byte[]>();
@@ -116,12 +106,12 @@ namespace DWSerializecs
             //もし追加で暗号化等の処理をする場合、ここで　inBytes に対して行う
             //byte[]を渡してbyte[] で返る
 
-
-
+            inBytes = ExecuteMethod(ScramblePattern + "_Encode", inBytes);
+            
             //output(debug)
             for (int i = 0; i < inBytes.Length; i++)
             {
-                Console.Write(inBytes[i].ToString() + ".");
+                //Console.Write(inBytes[i].ToString() + ".");
                 encodetext += inBytes[i].ToString() + ".";
             }
 
@@ -130,11 +120,11 @@ namespace DWSerializecs
 
             for (int i = 0; i < inBytes.Length; i++)
             {
-                Console.Write(GetBitStringFromString_dwp2(inBytes[i]) );
+                //Console.Write(GetBitStringFromString_dwp2(inBytes[i]) );
                 encodetext_dw += GetBitStringFromString_dwp2(inBytes[i]);
             }
 
-
+            return encodetext_dw;
             //generatebitdata = sbitarray;
         }
 
@@ -243,6 +233,19 @@ namespace DWSerializecs
             return list.ToArray();
         }
 
+        private static byte[] ExecuteMethod(string v, byte[] inBytes)
+        {
+            Scramble.cScramble sc = new Scramble.cScramble();
+            Type t = sc.GetType();
+
+            MethodInfo mi = t.GetMethod(v);
+
+            object o = mi.Invoke(sc, new object[] { inBytes });
+
+            byte[] ret = (byte[])o;
+
+            return ret;
+        }
 
     }
 }
