@@ -2,25 +2,81 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Reflection.Metadata;
 
 namespace DWSerializecs
 {
     class Program
     {
         private const string dwIndexString = "あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをんかぎぐげござじずぜぞだぢづでどばびぶべぼぱぴぷぺぽアイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲンカギグゲゴザジズゼゾダヂヅデドバビブベボパピプペポ";
-        private const string ScramblePattern = "None";
+
+        public static string ScramblePattern = "";
         static void Main(string[] args)
         {
-            string basetext = "";
-            basetext = "河野太郎";
+            if (!paramcheck(args))
+            {
+                ShowUsage();
+                return;
+            }
 
-            string result;
-            
-            result = TextEncode_dw(basetext);
-            Console.WriteLine(result);
-            result = TextDecode_dw(result);
-            Console.WriteLine(result);
+            ScramblePattern = args[1];
+            string basetext = args[2];
+            //basetext = "河野太郎";
+
+            string result ="";
+            switch (args[0].ToLower())
+            {
+                case "-encode":
+                    result = TextEncode_dw(basetext);
+                    Console.WriteLine(result);
+                    break;
+                case "-decode":
+                    result = TextDecode_dw(basetext);
+                    Console.WriteLine(result);
+                    break;
+            }
+
+        }
+
+        private static bool paramcheck(string[] args)
+        {
+            //parameter check
+            if (args.Length == 3)
+            {
+                if (args[0].ToLower() == "-encode" || args[0].ToLower() == "-decode")
+                {
+                    if (EncryptionCHeck(args[1]))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Crypt method '{args[1]}' is not Implemented.");
+                        return false;
+                    }
+
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool EncryptionCHeck(string v)
+        {
+            byte[] teststringBytes = System.Text.Encoding.UTF8.GetBytes(dwIndexString);
+            try
+            {
+                ExecuteMethod(v + "_Encode", teststringBytes);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         private static string TextDecode_dw(string text)
@@ -38,7 +94,7 @@ namespace DWSerializecs
 
             string[] decodebytes;
             // splitで区切らないで2文字ずつ抽出していくとどうか
-            decodebytes = MySplit(text.Replace(" ",""),2);
+            decodebytes = MySplit(text.Replace(" ", ""), 2);
 
 
             byte[] inbytes = new byte[decodebytes.Length];
@@ -78,12 +134,12 @@ namespace DWSerializecs
             result += System.Text.Encoding.UTF8.GetString(blist);
 
             return result;
-          
+
 
 
         }
 
-        private static string  TextEncode_dw(string inText)
+        private static string TextEncode_dw(string inText)
         {
 
             /*
@@ -107,7 +163,7 @@ namespace DWSerializecs
             //byte[]を渡してbyte[] で返る
 
             inBytes = ExecuteMethod(ScramblePattern + "_Encode", inBytes);
-            
+
             //output(debug)
             for (int i = 0; i < inBytes.Length; i++)
             {
@@ -245,6 +301,14 @@ namespace DWSerializecs
             byte[] ret = (byte[])o;
 
             return ret;
+        }
+
+        private static void ShowUsage()
+        {
+            Console.WriteLine("Usage dwSerializecs.exe < -encode | -decode > <cryptpattern> <string>");
+            Console.WriteLine("     < cryptpattern > <- Case Sensitive");
+            Console.WriteLine("            None      ... no encryption. ");
+            Console.WriteLine("            TripleDES ... 3DES encryption. ");
         }
 
     }
